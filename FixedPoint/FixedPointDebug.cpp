@@ -15,24 +15,6 @@
 #include <iostream>
 #include <cstdlib>
 
-const int FRACTION_BITS = 16;
-const int SCALE_FACTOR = 1 << FRACTION_BITS;
-
-// --- Helper Functions ---
-
-/**
- * Converts a floating-point number to fixed-point
- * @param value: Value to convert (float)
- * @return: Fixed-point value (fixed_t)
- */
-fixed_t float_to_fixed(float value) {
-	std::cout << "float_to_fixed called" << std::endl;
-	if (value >= 0)
-		return (fixed_t)(value * SCALE_FACTOR + 0.5f);
-	else
-		return (fixed_t)(value * SCALE_FACTOR - 0.5f);
-}
-
 // --- Constructors & Destructor ---
 
 Fixed::Fixed() : _value(0) {
@@ -41,20 +23,20 @@ Fixed::Fixed() : _value(0) {
 
 Fixed::Fixed(const int value) {
 	std::cout << "Int constructor called" << std::endl;
-	_value = value << FRACTION_BITS;
+	_value = value << _fractionalBits;
 }
 
 Fixed::Fixed(const float value){
 	std::cout << "Float constructor called" << std::endl;
 	if (value >= 0)
-		_value = (fixed_t)(value * SCALE_FACTOR + 0.5f);
+		this->_value = (int)(value * (1 << _fractionalBits) + 0.5f);
 	else
-		_value = float_to_fixed(value);
+		this->_value = (int)(value * (1 << _fractionalBits) - 0.5f);
 }
 
 Fixed::Fixed(const Fixed& other) {
 	std::cout << "Copy constructor called" << std::endl;
-	this->_value = other._value;
+	*this = other;
 }
 
 Fixed::~Fixed() {
@@ -98,7 +80,7 @@ void Fixed::setRawBits(int value) {
  */
 float Fixed::toFloat() const {
 	std::cout << "toFloat called" << std::endl;
-	return (float)_value / SCALE_FACTOR;
+	return (float)_value / (1 << _fractionalBits);
 }
 
 /**
@@ -107,7 +89,7 @@ float Fixed::toFloat() const {
  */
 int Fixed::toInt() const {
 	std::cout << "toInt called" << std::endl;
-	return _value >> FRACTION_BITS;
+	return _value >> _fractionalBits;
 }
 
 // --- Operators Overloads ---
@@ -115,92 +97,77 @@ int Fixed::toInt() const {
 // Comparison Operators
 bool Fixed::operator>(const Fixed& other) const {
 	std::cout << "operator> called" << std::endl;
-	return this->_value > other._value;
+	return (this->_value > other._value);
 }
 
 bool Fixed::operator<(const Fixed& other) const {
 	std::cout << "operator< called" << std::endl;
-	return this->_value < other._value;
+	return (this->_value < other._value);
 }
 
 bool Fixed::operator>=(const Fixed& other) const {
 	std::cout << "operator>= called" << std::endl;
-	return this->_value >= other._value;
+	return (this->_value >= other._value);
 }
 
 bool Fixed::operator<=(const Fixed& other) const {
 	std::cout << "operator<= called" << std::endl;
-	return this->_value <= other._value;
+	return (this->_value <= other._value);
 }
 
 bool Fixed::operator==(const Fixed& other) const {
 	std::cout << "operator== called" << std::endl;
-	return this->_value == other._value;
+	return (this->_value == other._value);
 }
 
 bool Fixed::operator!=(const Fixed& other) const {
 	std::cout << "operator!= called" << std::endl;
-	return this->_value != other._value;
+	return (this->_value != other._value);
 }
 
 // Arithmetic Operators
 Fixed Fixed::operator+(const Fixed& other) const {
-	std::cout << "operator+ called" << std::endl;
-	Fixed result;
-	result._value = this->_value + other._value;
-	return result;
+	return Fixed(this->toFloat() + other.toFloat());
 }
 
 Fixed Fixed::operator-(const Fixed& other) const {
-	std::cout << "operator- called" << std::endl;
-	Fixed result;
-	result._value = this->_value - other._value;
-	return result;
+	return Fixed(this->toFloat() - other.toFloat());
 }
 
 Fixed Fixed::operator*(const Fixed& other) const {
-	std::cout << "operator* called" << std::endl;
-	Fixed result;
-	result._value = (fixed_t)( ((int64_t)this->_value * (int64_t)other._value) >> FRACTION_BITS );
-	return result;
+	return Fixed(this->toFloat() * other.toFloat());
 }
 
 Fixed Fixed::operator/(const Fixed& other) const {
-	std::cout << "operator/ called" << std::endl;
-	if (other._value == 0) {
-		std::cerr << "Error: Division by zero detected!" << std::endl;
-		std::abort();
-	}
-	Fixed result;
-	result._value = (fixed_t)( ((int64_t)this->_value << FRACTION_BITS) / other._value );
-	return result;
+	return Fixed(this->toFloat() / other.toFloat());
 }
 
 // Increment / Decrement Operators
+
+// Pre-increment (++a)
 Fixed& Fixed::operator++() {
-	std::cout << "operator++ (prefix) called" << std::endl;
-	++this->_value;
+	this->_value++;
 	return *this;
 }
 
+// Post-increment (a++)
 Fixed Fixed::operator++(int) {
-	std::cout << "operator++ (postfix) called" << std::endl;
-	Fixed tmp(*this);
-	++this->_value;
-	return tmp;
+	Fixed temp(*this);
+	this->_value++;
+	return temp;
 }
 
+// Pre-decrement (--a)
 Fixed& Fixed::operator--() {
-	std::cout << "operator-- (prefix) called" << std::endl;
-	--this->_value;
+	this->_value--;
 	return *this;
 }
 
+// Post-decrement (a--)
 Fixed Fixed::operator--(int) {
-	std::cout << "operator-- (postfix) called" << std::endl;
-	Fixed tmp(*this);
-	--this->_value;
-	return tmp;
+	Fixed temp(*this);
+	this->_value--;
+	return temp;
 }
 
 // --- Static Public Functions ---
@@ -227,7 +194,6 @@ const Fixed& Fixed::max(const Fixed& a, const Fixed& b) {
 
 // Stream insertion overload
 std::ostream& operator<<(std::ostream& os, const Fixed& fixed) {
-	float value_to_display = fixed.toFloat();
-	os << value_to_display;
+	os << fixed.toFloat();
 	return os;
 }

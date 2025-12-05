@@ -6,7 +6,7 @@
 /*   By: abidaux <abidaux@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:33:07 by abidaux           #+#    #+#             */
-/*   Updated: 2025/12/05 01:49:08 by abidaux          ###   ########.fr       */
+/*   Updated: 2025/12/05 03:55:44 by abidaux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,7 @@
 #include <stdint.h>
 #include <iostream>
 
-extern const int FRACTION_BITS;
-extern const int SCALE_FACTOR;
 typedef int32_t fixed_t;
-
-/**
- * Converts a floating-point number to fixed-point
- * @param value: Value to convert (float)
- * @return: Fixed-point value (fixed_t)
- */
-fixed_t float_to_fixed(float value);
-
-/**
- * Converts a fixed-point number to floating-point
- * @param value: Value to convert (fixed_t)
- * @return: Floating-point value (float)
- */
-float fixed_to_float(fixed_t value);
 
 /**
  * Structure representing a fixed-point number
@@ -102,9 +86,9 @@ public:
 	static Fixed &max(Fixed &a, Fixed &b);
 	static const Fixed &max(const Fixed &a, const Fixed &b);
 
-private:
-	int _value;
-	static const int _fractionalBits = 8;
+	private:
+		int _value;
+		static const int _fractionalBits = 8;
 };
 
 // Stream insertion overload
