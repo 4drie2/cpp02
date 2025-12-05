@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ex00.cpp                                           :+:      :+:    :+:   */
+/*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abidaux <abidaux@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 16:57:44 by abidaux           #+#    #+#             */
-/*   Updated: 2025/12/05 03:21:55 by abidaux          ###   ########.fr       */
+/*   Updated: 2025/12/05 04:54:33 by abidaux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <iostream>
-#include "../FixedPoint/FixedPoint.hpp"
+#include "Fixed.hpp"
 
 int main( void ) {
 	std::cout << "subject main ----------" << std::endl;

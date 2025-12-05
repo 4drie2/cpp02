@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   FixedPoint.hpp                                     :+:      :+:    :+:   */
+/*   Fixed.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abidaux <abidaux@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/25 16:33:07 by abidaux           #+#    #+#             */
-/*   Updated: 2025/12/05 03:55:44 by abidaux          ###   ########.fr       */
+/*   Updated: 2025/12/05 05:00:59 by abidaux          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,8 +87,8 @@ public:
 	static const Fixed &max(const Fixed &a, const Fixed &b);
 
 	private:
-		int _value;
-		static const int _fractionalBits = 8;
+		int _fixedPointValue;
+		static const int _numberOfFractionalBits = 8;
 };
 
 // Stream insertion overload

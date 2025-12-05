@@ -10,39 +10,45 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "FixedPoint.hpp"
+#include "Fixed.hpp"
 #include <cmath>
 #include <iostream>
 #include <cstdlib>
 
 // --- Constructors & Destructor ---
 
-Fixed::Fixed() : _value(0) {
+Fixed::Fixed() : _fixedPointValue(0) {
+	std::cout << "Default constructor called" << std::endl;
 }
 
 Fixed::Fixed(const int value) {
-	_value = value << _fractionalBits;
+	std::cout << "Int constructor called" << std::endl;
+	_fixedPointValue = value << _numberOfFractionalBits;
 }
 
 Fixed::Fixed(const float value){
+	std::cout << "Float constructor called" << std::endl;
 	if (value >= 0)
-		this->_value = (int)(value * (1 << _fractionalBits) + 0.5f);
+		this->_fixedPointValue = (int)(value * (1 << _numberOfFractionalBits) + 0.5f);
 	else
-		this->_value = (int)(value * (1 << _fractionalBits) - 0.5f);
+		this->_fixedPointValue = (int)(value * (1 << _numberOfFractionalBits) - 0.5f);
 }
 
 Fixed::Fixed(const Fixed& other) {
+	std::cout << "Copy constructor called" << std::endl;
 	*this = other;
 }
 
 Fixed::~Fixed() {
+	std::cout << "Destructor called" << std::endl;
 }
 
 // --- Assignment Operator ---
 
 Fixed& Fixed::operator=(const Fixed& other) {
+	std::cout << "Assignment operator called" << std::endl;
 	if (this != &other)
-		this->_value = other._value;
+		this->_fixedPointValue = other._fixedPointValue;
 	return *this;
 }
 
@@ -53,7 +59,8 @@ Fixed& Fixed::operator=(const Fixed& other) {
  * @return: Raw fixed-point value
  */
 int Fixed::getRawBits() const {
-	return _value;
+	std::cout << "getRawBits called" << std::endl;
+	return _fixedPointValue;
 }
 
 /**
@@ -61,7 +68,8 @@ int Fixed::getRawBits() const {
  * @param value: Raw fixed-point value
  */
 void Fixed::setRawBits(int value) {
-	_value = value;
+	std::cout << "setRawBits called" << std::endl;
+	_fixedPointValue = value;
 }
 
 // --- Converters ---
@@ -71,7 +79,8 @@ void Fixed::setRawBits(int value) {
  * @return: Floating-point value
  */
 float Fixed::toFloat() const {
-	return (float)_value / (1 << _fractionalBits);
+	std::cout << "toFloat called" << std::endl;
+	return (float)_fixedPointValue / (1 << _numberOfFractionalBits);
 }
 
 /**
@@ -79,34 +88,41 @@ float Fixed::toFloat() const {
  * @return: Integer value
  */
 int Fixed::toInt() const {
-	return _value >> _fractionalBits;
+	std::cout << "toInt called" << std::endl;
+	return _fixedPointValue >> _numberOfFractionalBits;
 }
 
 // --- Operators Overloads ---
 
 // Comparison Operators
 bool Fixed::operator>(const Fixed& other) const {
-	return (this->_value > other._value);
+	std::cout << "operator> called" << std::endl;
+	return (this->_fixedPointValue > other._fixedPointValue);
 }
 
 bool Fixed::operator<(const Fixed& other) const {
-	return (this->_value < other._value);
+	std::cout << "operator< called" << std::endl;
+	return (this->_fixedPointValue < other._fixedPointValue);
 }
 
 bool Fixed::operator>=(const Fixed& other) const {
-	return (this->_value >= other._value);
+	std::cout << "operator>= called" << std::endl;
+	return (this->_fixedPointValue >= other._fixedPointValue);
 }
 
 bool Fixed::operator<=(const Fixed& other) const {
-	return (this->_value <= other._value);
+	std::cout << "operator<= called" << std::endl;
+	return (this->_fixedPointValue <= other._fixedPointValue);
 }
 
 bool Fixed::operator==(const Fixed& other) const {
-	return (this->_value == other._value);
+	std::cout << "operator== called" << std::endl;
+	return (this->_fixedPointValue == other._fixedPointValue);
 }
 
 bool Fixed::operator!=(const Fixed& other) const {
-	return (this->_value != other._value);
+	std::cout << "operator!= called" << std::endl;
+	return (this->_fixedPointValue != other._fixedPointValue);
 }
 
 // Arithmetic Operators
@@ -123,7 +139,7 @@ Fixed Fixed::operator*(const Fixed& other) const {
 }
 
 Fixed Fixed::operator/(const Fixed& other) const {
-	if (other._value == 0) {
+	if (other._fixedPointValue == 0) {
 		std::cerr << "Division by zero error" << std::endl;
 		exit(EXIT_FAILURE);
 	}
@@ -134,46 +150,50 @@ Fixed Fixed::operator/(const Fixed& other) const {
 
 // Pre-increment (++a)
 Fixed& Fixed::operator++() {
-	this->_value++;
+	this->_fixedPointValue++;
 	return *this;
 }
 
 // Post-increment (a++)
 Fixed Fixed::operator++(int) {
 	Fixed temp(*this);
-	this->_value++;
+	this->_fixedPointValue++;
 	return temp;
 }
 
 // Pre-decrement (--a)
 Fixed& Fixed::operator--() {
-	this->_value--;
+	this->_fixedPointValue--;
 	return *this;
 }
 
 // Post-decrement (a--)
 Fixed Fixed::operator--(int) {
 	Fixed temp(*this);
-	this->_value--;
+	this->_fixedPointValue--;
 	return temp;
 }
 
 // --- Static Public Functions ---
 
 Fixed& Fixed::min(Fixed& a, Fixed& b) {
+	std::cout << "min (non-const) called" << std::endl;
 	return (a < b) ? a : b;
 }
 
 const Fixed& Fixed::min(const Fixed& a, const Fixed& b) {
-	return (a._value < b._value) ? a : b;
+	std::cout << "min (const) called" << std::endl;
+	return (a._fixedPointValue < b._fixedPointValue) ? a : b;
 }
 
 Fixed& Fixed::max(Fixed& a, Fixed& b) {
+	std::cout << "max (non-const) called" << std::endl;
 	return (a > b) ? a : b;
 }
 
 const Fixed& Fixed::max(const Fixed& a, const Fixed& b) {
-	return (a._value > b._value) ? a : b;
+	std::cout << "max (const) called" << std::endl;
+	return (a._fixedPointValue > b._fixedPointValue) ? a : b;
 }
 
 // Stream insertion overload
