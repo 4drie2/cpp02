@@ -6,19 +6,19 @@
 #    By: abidaux <abidaux@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/12/02 00:00:00 by abidaux           #+#    #+#              #
-#    Updated: 2025/12/03 21:49:51 by abidaux          ###   ########.fr        #
+#    Updated: 2025/12/03 21:50:16 by abidaux          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Program name
-NAME		= ex00
+NAME		= ex01
 
 # Compiler and flags
 CXX			= c++
 CXXFLAGS	= -Wall -Wextra -Werror -std=c++98
 
 # Source files
-SRCS		= ex00.cpp \
+SRCS		= ex01.cpp \
 			  ../FixedPoint/FixedPointDebug.cpp
 
 # Object files
