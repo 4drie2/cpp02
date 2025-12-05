@@ -231,3 +231,6 @@ std::ostream& operator<<(std::ostream& os, const Fixed& fixed) {
 	os << value_to_display;
 	return os;
 }
+
+
+// GEMINI SALE MERDE
